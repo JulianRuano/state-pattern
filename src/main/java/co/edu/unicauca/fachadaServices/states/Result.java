@@ -1,5 +1,4 @@
 package co.edu.unicauca.fachadaServices.states;
 
-public class Result {
-    
+public record Result(boolean success, String message) {
 }

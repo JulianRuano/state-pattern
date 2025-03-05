@@ -6,26 +6,22 @@ public class approveState implements StatesInt {
 
     @Override
     public Result sendForEvaluation(FormatDTO format) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sendForEvaluation'");
+        return new Result(false, "El formato ya ha sido aprobado");
     }
 
     @Override
     public Result approveFormat(FormatDTO format) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'approveFormat'");
+        return new Result(false, "El formato ya ha sido aprobado");
     }
 
     @Override
     public Result rejectFormat(FormatDTO format) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'rejectFormat'");
+        return new Result(false, "El formato ya ha sido aprobado");
     }
 
     @Override
     public Result sendForRevision(FormatDTO format) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sendForRevision'");
+        return new Result(false, "El formato ya ha sido aprobado");
     }
 
 
