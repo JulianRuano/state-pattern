@@ -1,7 +1,8 @@
-package co.edu.unicauca.fachadaServices.DTO;
+package co.edu.unicauca.fachadaServices.DTO.request;
 
 import java.util.List;
 
+import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
 import lombok.Getter;
 import lombok.Setter;
 

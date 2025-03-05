@@ -3,6 +3,7 @@ package co.edu.unicauca.capaAccesoDatos.models;
 import java.sql.Date;
 import java.util.List;
 
+import co.edu.unicauca.capaAccesoDatos.models.states.Result;
 import co.edu.unicauca.capaAccesoDatos.models.states.StatesInt;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,4 +21,20 @@ public class FormatEntity {
     private List<String> specificObjectives;
 
     private StatesInt state;
+
+    public Result sendForEvaluation() {
+        return state.sendForEvaluation(this);
+    }
+
+    public Result approveFormat() {
+        return state.approveFormat(this);
+    }
+
+    public Result rejectFormat() {
+        return state.rejectFormat(this);
+    }
+
+    public Result sendForRevision() {
+        return state.sendForRevision(this);
+    }
 }
