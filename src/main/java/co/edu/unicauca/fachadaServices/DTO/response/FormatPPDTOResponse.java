@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
+import co.edu.unicauca.fachadaServices.states.StatesInt;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,12 +14,14 @@ public class FormatPPDTOResponse extends FormatDTO{
     private String advisor;
     private String student1;
     private Date date;
+    private StatesInt state;
 
     public FormatPPDTOResponse(Integer id, String title, String director, String generalobjective,
-            List<String> specificobjectives, String advisor, String student1, Date date) {
+            List<String> specificobjectives, String advisor, String student1, Date date, StatesInt state) {
         super(id, title, director, generalobjective, specificobjectives);
         this.student1 = student1;
         this.advisor = advisor;
         this.date = date;
+        this.state = state;
     }
 }
