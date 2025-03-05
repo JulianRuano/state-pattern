@@ -2,7 +2,7 @@ package co.edu.unicauca.fachadaServices.states;
 
 import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
 
-public class approveState implements StatesInt {
+public class ApproveState implements StatesInt {
 
     @Override
     public Result sendForEvaluation(FormatDTO format) {
