@@ -1,4 +1,4 @@
-package co.edu.unicauca.capaAccesoDatos.models.states;
+package co.edu.unicauca.fachadaServices.states;
 
 import co.edu.unicauca.capaAccesoDatos.models.FormatEntity;
 
