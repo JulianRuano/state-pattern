@@ -1,6 +1,8 @@
 package co.edu.unicauca.capaControladores;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,5 +25,9 @@ public class FormatRestController {
         return formatService.createFormat(format);
     }
     
+    @PatchMapping("/format/{id}/{state}")
+    public String changeState(@PathVariable Integer id, @PathVariable String state) {
+        return formatService.changeState(id, state);
+    }
     
 }

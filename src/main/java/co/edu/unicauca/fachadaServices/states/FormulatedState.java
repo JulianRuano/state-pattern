@@ -2,15 +2,18 @@ package co.edu.unicauca.fachadaServices.states;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import co.edu.unicauca.capaAccesoDatos.models.FormatEntity;
 import co.edu.unicauca.capaAccesoDatos.repositories.FormatRepository;
 import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
 
-public class CorrectionState implements StatesInt {
+@Service
+public class FormulatedState implements StatesInt {
 
     private final FormatRepository repository;
 
-    public CorrectionState(FormatRepository repository) {
+    public FormulatedState(FormatRepository repository) {
         this.repository = repository;
     }
 
@@ -24,17 +27,17 @@ public class CorrectionState implements StatesInt {
 
     @Override
     public Result approveFormat(FormatDTO format) {
-        return new Result(false, "El formato no puede ser aprobado en estado de revisión");
+        return new Result(false, "El formato no puede ser aprobado en estado de formulación");
     }
 
     @Override
     public Result rejectFormat(FormatDTO format) {
-        return new Result(false, "El formato no puede ser rechazado en estado de revisión");
+        return new Result(false, "El formato no puede ser rechazado en estado de formulación");
     }
 
     @Override
     public Result sendForCorrection(FormatDTO format) {
-        return new Result(false, "El formato ya ha sido enviado para revisión");
+        return new Result(false, "El formato no puede ser enviado para revisión en estado de formulación");
     }
     
 }
