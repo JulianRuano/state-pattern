@@ -1,9 +1,7 @@
 package co.edu.unicauca.fachadaServices.states;
 
 import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class CorrectionState implements StatesInt {
 
 

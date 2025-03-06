@@ -4,21 +4,18 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import co.edu.unicauca.capaAccesoDatos.models.FormatEntity;
 import co.edu.unicauca.capaAccesoDatos.repositories.FormatRepository;
 import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
 import co.edu.unicauca.fachadaServices.states.Result;
-import lombok.RequiredArgsConstructor;
 
 @Service("formatServiceImpl")
 public class FormatServiceImpl  implements IFormatService{
 
     private StateServices stateServices;
 
-    @Qualifier("IDFormatoRepository")
     private  FormatRepository repository;
 
     private  ModelMapper modelMapper;
