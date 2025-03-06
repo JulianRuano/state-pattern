@@ -6,5 +6,5 @@ public interface StatesInt {
     Result sendForEvaluation(FormatDTO format);
     Result approveFormat(FormatDTO format);
     Result rejectFormat(FormatDTO format);
-    Result sendForRevision(FormatDTO format);
+    Result sendForCorrection(FormatDTO format);
 }

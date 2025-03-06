@@ -14,6 +14,6 @@ public class FormatDTO {
     private Integer id;
     private String title;
     private String director;
-    private String generalobjective;;
-    private List<String> specificobjectives;
+    private String generalObjective;;
+    private List<String> specificObjectives;
 }

@@ -20,7 +20,7 @@ public class ApproveState implements StatesInt {
     }
 
     @Override
-    public Result sendForRevision(FormatDTO format) {
+    public Result sendForCorrection(FormatDTO format) {
         return new Result(false, "El formato ya ha sido aprobado");
     }
 
