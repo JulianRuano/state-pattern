@@ -22,7 +22,7 @@ public class EvaluationState implements StatesInt{
     @Override
     public Result approveFormat(FormatDTO format) {
         Optional<FormatEntity> formatEntity = repository.findById(format.getId());
-        formatEntity.get().setState("approved");
+        formatEntity.get().setStateEntity("approved");
         repository.save(formatEntity.get());
         return new Result(true, "El formato ha sido aprobado");
     }
@@ -30,7 +30,7 @@ public class EvaluationState implements StatesInt{
     @Override
     public Result rejectFormat(FormatDTO format) {
         Optional<FormatEntity> formatEntity = repository.findById(format.getId());
-        formatEntity.get().setState("rejected");
+        formatEntity.get().setStateEntity("rejected");
         repository.save(formatEntity.get());
         return new Result(true, "El formato ha sido rechazado");
 
@@ -39,7 +39,7 @@ public class EvaluationState implements StatesInt{
     @Override
     public Result sendForCorrection(FormatDTO format) {
         Optional<FormatEntity> formatEntity = repository.findById(format.getId());
-        formatEntity.get().setState("correction");
+        formatEntity.get().setStateEntity("correction");
         repository.save(formatEntity.get());
         return new Result(true, "El formato ha sido enviado a revisión");
     }

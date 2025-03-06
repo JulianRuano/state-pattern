@@ -17,7 +17,7 @@ public class CorrectionState implements StatesInt {
     @Override
     public Result sendForEvaluation(FormatDTO format) {
         Optional<FormatEntity> formatEntity = repository.findById(format.getId());
-        formatEntity.get().setState("evaluation");
+        formatEntity.get().setStateEntity("evaluation");
         repository.save(formatEntity.get());
         return new Result(true, "El formato ha sido enviado para evaluación");
     }

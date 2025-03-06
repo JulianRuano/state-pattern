@@ -17,5 +17,5 @@ public class FormatEntity {
     private String generalObjective;
     private List<String> specificObjectives;
 
-    private String state;
+    private String stateEntity;
 }

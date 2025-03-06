@@ -34,7 +34,7 @@ public class FormatServiceImpl  implements IFormatService{
     @Override
     public FormatDTO createFormat(FormatDTO format) {
         FormatEntity formatEntity = this.mapper.toFormatEntity(format);
-        formatEntity.setState("formulated");
+        formatEntity.setStateEntity("formulated");
         formatEntity.setDate(new Date());
         return this.mapper.toFormatDTO(repository.save(formatEntity));
     }
@@ -70,7 +70,7 @@ public class FormatServiceImpl  implements IFormatService{
             FormatDTO formatDTO = this.mapper.toFormatDTO(format.get());
 
             //asignar un obj de estado al DTO
-            switch (format.get().getState()) {
+            switch (format.get().getStateEntity()) {
                 case "formulated":
                     stateServices.setState(new FormulatedState(repository));
                     break;
