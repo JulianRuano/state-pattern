@@ -2,13 +2,12 @@ package co.edu.unicauca.fachadaServices.DTO.request;
 
 import java.util.List;
 
-import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class FormatPPDTORequest extends FormatDTO {
+public class FormatPPDTORequest extends FormatDTORequest {
 
     private String advisor;
     private String student1;

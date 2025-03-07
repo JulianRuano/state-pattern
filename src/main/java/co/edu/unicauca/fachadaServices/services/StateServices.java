@@ -2,7 +2,7 @@ package co.edu.unicauca.fachadaServices.services;
 
 import org.springframework.stereotype.Service;
 
-import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
+import co.edu.unicauca.fachadaServices.DTO.request.FormatDTORequest;
 import co.edu.unicauca.fachadaServices.states.Result;
 import co.edu.unicauca.fachadaServices.states.StatesInt;
 import lombok.Getter;
@@ -19,19 +19,19 @@ public class StateServices  {
         this.state = state;
     }
 
-    public Result sendForEvaluation(FormatDTO format) {
+    public Result sendForEvaluation(FormatDTORequest format) {
         return state.sendForEvaluation(format);
     }
 
-    public Result approveFormat(FormatDTO format) {
+    public Result approveFormat(FormatDTORequest format) {
         return state.approveFormat(format);
     }
 
-    public Result rejectFormat(FormatDTO format) {
+    public Result rejectFormat(FormatDTORequest format) {
         return state.rejectFormat(format);
     }
 
-    public Result sendForCorrection(FormatDTO format) {
+    public Result sendForCorrection(FormatDTORequest format) {
         return state.sendForCorrection(format);
     }
 }

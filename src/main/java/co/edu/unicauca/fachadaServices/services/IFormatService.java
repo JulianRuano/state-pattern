@@ -1,14 +1,15 @@
 package co.edu.unicauca.fachadaServices.services;
 
-import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
+import co.edu.unicauca.fachadaServices.DTO.request.FormatDTORequest;
+import co.edu.unicauca.fachadaServices.DTO.response.FormatDTOResponse;
 
 public interface IFormatService {
 
-    public FormatDTO createFormat(FormatDTO format);
-    public FormatDTO updateFormat(Integer id, FormatDTO format);
-    public FormatDTO getFormat(Integer id);
+    public FormatDTOResponse createFormat(FormatDTORequest format);
+    public FormatDTOResponse updateFormat(Integer id, FormatDTORequest format);
+    public FormatDTOResponse getFormat(Integer id);
     public void deleteFormat(Integer id);
-    public FormatDTO findAllFormatDTO();
+    public FormatDTOResponse findAllFormatDTO();
 
     public String changeState(Integer id, String state);
 }

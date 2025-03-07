@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import co.edu.unicauca.capaAccesoDatos.models.FormatEntity;
 import co.edu.unicauca.capaAccesoDatos.repositories.FormatRepository;
-import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
+import co.edu.unicauca.fachadaServices.DTO.request.FormatDTORequest;
 
 public class CorrectionState implements StatesInt {
 
@@ -15,25 +15,25 @@ public class CorrectionState implements StatesInt {
     }
 
     @Override
-    public Result sendForEvaluation(FormatDTO format) {
+    public Result sendForEvaluation(FormatDTORequest format) {
         Optional<FormatEntity> formatEntity = repository.findById(format.getId());
-        formatEntity.get().setStateEntity("evaluation");
+        formatEntity.get().setState("evaluation");
         repository.save(formatEntity.get());
         return new Result(true, "El formato ha sido enviado para evaluación");
     }
 
     @Override
-    public Result approveFormat(FormatDTO format) {
+    public Result approveFormat(FormatDTORequest format) {
         return new Result(false, "El formato no puede ser aprobado en estado de revisión");
     }
 
     @Override
-    public Result rejectFormat(FormatDTO format) {
+    public Result rejectFormat(FormatDTORequest format) {
         return new Result(false, "El formato no puede ser rechazado en estado de revisión");
     }
 
     @Override
-    public Result sendForCorrection(FormatDTO format) {
+    public Result sendForCorrection(FormatDTORequest format) {
         return new Result(false, "El formato ya ha sido enviado para revisión");
     }
     

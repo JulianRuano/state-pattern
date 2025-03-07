@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
+import co.edu.unicauca.fachadaServices.DTO.request.FormatDTORequest;
+import co.edu.unicauca.fachadaServices.DTO.response.FormatDTOResponse;
 import co.edu.unicauca.fachadaServices.services.IFormatService;
 import lombok.RequiredArgsConstructor;
 
@@ -20,8 +21,9 @@ public class FormatRestController {
     @Qualifier("formatServiceImpl")
     private final IFormatService formatService;
 
+
     @PostMapping("/format")
-    public FormatDTO createFormat(@RequestBody FormatDTO format) {
+    public FormatDTOResponse create(@RequestBody FormatDTORequest format) {    
         return formatService.createFormat(format);
     }
     

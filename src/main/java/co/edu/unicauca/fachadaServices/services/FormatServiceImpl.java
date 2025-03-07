@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 
 import co.edu.unicauca.capaAccesoDatos.models.FormatEntity;
 import co.edu.unicauca.capaAccesoDatos.repositories.FormatRepository;
-import co.edu.unicauca.fachadaServices.DTO.FormatDTO;
+import co.edu.unicauca.fachadaServices.DTO.request.FormatDTORequest;
+import co.edu.unicauca.fachadaServices.DTO.response.FormatDTOResponse;
 import co.edu.unicauca.fachadaServices.mapper.FormatMapper;
 import co.edu.unicauca.fachadaServices.states.ApproveState;
 import co.edu.unicauca.fachadaServices.states.CorrectionState;
@@ -32,20 +33,24 @@ public class FormatServiceImpl  implements IFormatService{
     }
 
     @Override
-    public FormatDTO createFormat(FormatDTO format) {
+    public FormatDTOResponse createFormat(FormatDTORequest format) {
         FormatEntity formatEntity = this.mapper.toFormatEntity(format);
-        formatEntity.setStateEntity("formulated");
+        formatEntity.setState("formulated");
         formatEntity.setDate(new Date());
-        return this.mapper.toFormatDTO(repository.save(formatEntity));
+        return this.mapper.toFormatDTOResponse(repository.save(formatEntity));     
     }
 
     @Override
-    public FormatDTO updateFormat(Integer id, FormatDTO format) {
+    public FormatDTOResponse updateFormat(Integer id, FormatDTORequest format) {
         return null;
     }
 
     @Override
-    public FormatDTO getFormat(Integer id) {
+    public FormatDTOResponse getFormat(Integer id) {
+        Optional<FormatEntity> format = repository.findById(id);
+        if(format.isPresent()){
+            return this.mapper.toFormatDTOResponse(format.get());
+        }
         return null;
     }
 
@@ -55,7 +60,7 @@ public class FormatServiceImpl  implements IFormatService{
     }
 
     @Override
-    public FormatDTO findAllFormatDTO() {
+    public FormatDTOResponse findAllFormatDTO() {
         return null;
     }
 
@@ -67,10 +72,10 @@ public class FormatServiceImpl  implements IFormatService{
         
         if(format.isPresent()){
 
-            FormatDTO formatDTO = this.mapper.toFormatDTO(format.get());
+            FormatDTORequest formatDTO = this.mapper.toFormatDTORequest(format.get());
 
             //asignar un obj de estado al DTO
-            switch (format.get().getStateEntity()) {
+            switch (format.get().getState()) {
                 case "formulated":
                     stateServices.setState(new FormulatedState(repository));
                     break;

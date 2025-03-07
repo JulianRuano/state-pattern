@@ -19,9 +19,10 @@ public class FormatRepository {
     }
 
     // Guardar un formato
-    public FormatEntity save(FormatEntity formato) {
-        formatos.put(formato.getId(), formato);
-        return formato;
+    public FormatEntity save(FormatEntity format) {
+        format.setId(formatos.size() + 1);
+        formatos.put(format.getId(), format);
+        return format;
     }
 
     // Actualizar un formato
