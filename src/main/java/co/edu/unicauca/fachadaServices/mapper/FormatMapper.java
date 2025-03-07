@@ -34,6 +34,4 @@ public interface FormatMapper {
     @SubclassMapping(source = FormatPPDTORequest.class, target = FormatPPEntity.class)
     @SubclassMapping(source = FormatTIDTORequest.class, target = FormatTIEntity.class)
     FormatEntity toFormatEntity(FormatDTORequest formatDTO);
-
-
 }

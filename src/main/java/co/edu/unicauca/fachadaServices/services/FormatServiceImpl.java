@@ -1,5 +1,6 @@
 package co.edu.unicauca.fachadaServices.services;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
@@ -58,11 +59,13 @@ public class FormatServiceImpl  implements IFormatService{
     public void deleteFormat(Integer id) {
         repository.delete(id);
     }
-
+    
     @Override
-    public FormatDTOResponse findAllFormatDTO() {
-        return null;
+    public Collection<FormatDTOResponse> getFormatByDateRange(Date startDate, Date endDate) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getFormatByDateRange'");
     }
+
 
     @Override
     public String changeState(Integer id, String state) {
@@ -112,5 +115,7 @@ public class FormatServiceImpl  implements IFormatService{
         return result.message();
         
     }
+
+
     
 }
