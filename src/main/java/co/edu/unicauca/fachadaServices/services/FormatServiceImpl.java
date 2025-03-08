@@ -1,12 +1,16 @@
 package co.edu.unicauca.fachadaServices.services;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import co.edu.unicauca.capaAccesoDatos.models.FormatEntity;
+import co.edu.unicauca.capaAccesoDatos.models.FormatPPEntity;
+import co.edu.unicauca.capaAccesoDatos.models.FormatTIEntity;
 import co.edu.unicauca.capaAccesoDatos.repositories.FormatRepository;
 import co.edu.unicauca.fachadaServices.DTO.request.FormatDTORequest;
 import co.edu.unicauca.fachadaServices.DTO.response.FormatDTOResponse;
@@ -19,11 +23,11 @@ import co.edu.unicauca.fachadaServices.states.RejectSatate;
 import co.edu.unicauca.fachadaServices.states.Result;
 
 @Service("formatServiceImpl")
-public class FormatServiceImpl  implements IFormatService{
+public class FormatServiceImpl implements IFormatService {
 
     private StateServices stateServices;
 
-    private  FormatRepository repository;
+    private FormatRepository repository;
 
     private final FormatMapper mapper;
 
@@ -38,18 +42,48 @@ public class FormatServiceImpl  implements IFormatService{
         FormatEntity formatEntity = this.mapper.toFormatEntity(format);
         formatEntity.setState("formulated");
         formatEntity.setDate(new Date());
-        return this.mapper.toFormatDTOResponse(repository.save(formatEntity));     
+        return this.mapper.toFormatDTOResponse(repository.save(formatEntity));
     }
 
     @Override
     public FormatDTOResponse updateFormat(Integer id, FormatDTORequest format) {
-        return null;
+        Optional<FormatEntity> existingFormatOpt = repository.findById(id);
+        if (!existingFormatOpt.isPresent()) {
+            return null; // O lanzar una excepción personalizada
+        }
+
+        FormatEntity existingFormat = existingFormatOpt.get();
+        FormatEntity updatedFormat = mapper.toFormatEntity(format);
+
+        updatedFormat.setId(existingFormat.getId());
+        updatedFormat.setState(existingFormat.getState());
+        updatedFormat.setDate(existingFormat.getDate());
+
+        // Verificar el tipo de la entidad para actualizar sus campos específicos
+        /*
+         * if (existingFormat instanceof FormatPPEntity && updatedFormat instanceof
+         * FormatPPEntity) {
+         * ((FormatPPEntity) updatedFormat).setAdvisor(((FormatPPEntity)
+         * existingFormat).getAdvisor());
+         * ((FormatPPEntity) updatedFormat).setStudent1(((FormatPPEntity)
+         * existingFormat).getStudent1());
+         * } else if (existingFormat instanceof FormatTIEntity && updatedFormat
+         * instanceof FormatTIEntity) {
+         * ((FormatTIEntity) updatedFormat).setStudent1(((FormatTIEntity)
+         * existingFormat).getStudent1());
+         * ((FormatTIEntity) updatedFormat).setStudent2(((FormatTIEntity)
+         * existingFormat).getStudent2());
+         * }
+         */
+
+        FormatEntity savedFormat = repository.save(updatedFormat);
+        return mapper.toFormatDTOResponse(savedFormat);
     }
 
     @Override
     public FormatDTOResponse getFormat(Integer id) {
         Optional<FormatEntity> format = repository.findById(id);
-        if(format.isPresent()){
+        if (format.isPresent()) {
             return this.mapper.toFormatDTOResponse(format.get());
         }
         return null;
@@ -59,26 +93,37 @@ public class FormatServiceImpl  implements IFormatService{
     public void deleteFormat(Integer id) {
         repository.delete(id);
     }
-    
-    @Override
-    public Collection<FormatDTOResponse> getFormatByDateRange(Date startDate, Date endDate) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFormatByDateRange'");
-    }
 
+    @Override
+    public Collection<FormatDTOResponse> getFormatByDateRange(String startDateStr, String endDateStr) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date startDate = dateFormat.parse(startDateStr);
+            Date endDate = dateFormat.parse(endDateStr);
+
+            Collection<FormatEntity> formats = repository.findByDateRange(startDate, endDate);
+
+            return formats.stream().map(mapper::toFormatDTOResponse).collect(Collectors.toList());
+            
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Formato de fecha inválido. Use yyyy-MM-dd", e);
+        }
+    }
 
     @Override
     public String changeState(Integer id, String state) {
         Optional<FormatEntity> format = repository.findById(id);
 
         Result result = null;
-        
-        if(format.isPresent()){
+
+        if (format.isPresent()) {
 
             FormatDTORequest formatDTO = this.mapper.toFormatDTORequest(format.get());
 
-            //asignar un obj de estado al DTO
-            switch (format.get().getState()) {
+            // asignar un obj de estado al DTO
+            this.assignState(format.get().getState());
+            
+            /*switch (format.get().getState()) {
                 case "formulated":
                     stateServices.setState(new FormulatedState(repository));
                     break;
@@ -94,7 +139,7 @@ public class FormatServiceImpl  implements IFormatService{
                 case "evaluation":
                     stateServices.setState(new EvaluationState(repository));
                     break;
-            }
+            }*/
 
             switch (state) {
                 case "approved":
@@ -107,15 +152,33 @@ public class FormatServiceImpl  implements IFormatService{
                     result = stateServices.sendForCorrection(formatDTO);
                     break;
                 case "evaluation":
-                    result = stateServices.sendForEvaluation(formatDTO);  
+                    result = stateServices.sendForEvaluation(formatDTO);
                     break;
             }
         }
 
         return result.message();
-        
+
     }
 
-
+    private void assignState(String currentState) {
+        switch (currentState) {
+            case "formulated":
+                stateServices.setState(new FormulatedState(repository));
+                break;
+            case "approved":
+                stateServices.setState(new ApproveState());
+                break;
+            case "rejected":
+                stateServices.setState(new RejectSatate()); // Corregido el nombre
+                break;
+            case "correction":
+                stateServices.setState(new CorrectionState(repository));
+                break;
+            case "evaluation":
+                stateServices.setState(new EvaluationState(repository));
+                break;
+        }
+    }
     
 }

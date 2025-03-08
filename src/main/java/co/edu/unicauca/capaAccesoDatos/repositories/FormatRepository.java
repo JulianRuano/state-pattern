@@ -1,9 +1,11 @@
 package co.edu.unicauca.capaAccesoDatos.repositories;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -28,9 +30,9 @@ public class FormatRepository {
     // Actualizar un formato
     public Optional<FormatEntity> update(Integer id, FormatEntity formato) {
         Optional<FormatEntity> formatoOptional;
-        if(this.formatos.containsKey(id)){
+        if (this.formatos.containsKey(id)) {
             formatoOptional = Optional.of(formatos.put(id, formato));
-        }else{
+        } else {
             formatoOptional = Optional.empty();
         }
 
@@ -46,9 +48,18 @@ public class FormatRepository {
     public Optional<Collection<FormatEntity>> findAll() {
         return formatos.isEmpty() ? Optional.empty() : Optional.of(formatos.values());
     }
+
     // Buscar un formato
     public Optional<FormatEntity> findById(Integer id) {
         return Optional.ofNullable(formatos.get(id));
     }
-    
+
+    public Collection<FormatEntity> findByDateRange(Date startDate, Date endDate) {
+        return formatos.values().stream()
+                .filter(format -> {
+                    Date formatDate = format.getDate();
+                    return formatDate != null && !formatDate.before(startDate) && !formatDate.after(endDate);
+                })
+                .collect(Collectors.toList());
+    }
 }
