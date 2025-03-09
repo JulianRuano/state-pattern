@@ -28,15 +28,8 @@ public class FormatRepository {
     }
 
     // Actualizar un formato
-    public Optional<FormatEntity> update(Integer id, FormatEntity formato) {
-        Optional<FormatEntity> formatoOptional;
-        if (this.formatos.containsKey(id)) {
-            formatoOptional = Optional.of(formatos.put(id, formato));
-        } else {
-            formatoOptional = Optional.empty();
-        }
-
-        return formatoOptional;
+    public FormatEntity update(FormatEntity formato) {
+        return formatos.put(formato.getId(), formato);  
     }
 
     // Eliminar un formato

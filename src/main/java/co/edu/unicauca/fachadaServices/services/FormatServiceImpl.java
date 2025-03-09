@@ -9,11 +9,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import co.edu.unicauca.capaAccesoDatos.models.FormatEntity;
-import co.edu.unicauca.capaAccesoDatos.models.FormatPPEntity;
-import co.edu.unicauca.capaAccesoDatos.models.FormatTIEntity;
 import co.edu.unicauca.capaAccesoDatos.repositories.FormatRepository;
 import co.edu.unicauca.fachadaServices.DTO.request.FormatDTORequest;
 import co.edu.unicauca.fachadaServices.DTO.response.FormatDTOResponse;
+import co.edu.unicauca.fachadaServices.DTO.response.ResponseDto;
 import co.edu.unicauca.fachadaServices.mapper.FormatMapper;
 import co.edu.unicauca.fachadaServices.states.ApproveState;
 import co.edu.unicauca.fachadaServices.states.CorrectionState;
@@ -38,18 +37,22 @@ public class FormatServiceImpl implements IFormatService {
     }
 
     @Override
-    public FormatDTOResponse createFormat(FormatDTORequest format) {
+    public ResponseDto<FormatDTOResponse> createFormat(FormatDTORequest format) {
         FormatEntity formatEntity = this.mapper.toFormatEntity(format);
         formatEntity.setState("formulated");
         formatEntity.setDate(new Date());
-        return this.mapper.toFormatDTOResponse(repository.save(formatEntity));
+        return  new ResponseDto<>(this.mapper.toFormatDTOResponse(repository.save(formatEntity)), 201, "Formato creado correctamente");
     }
 
     @Override
-    public FormatDTOResponse updateFormat(Integer id, FormatDTORequest format) {
+    public ResponseDto<FormatDTOResponse> updateFormat(Integer id, FormatDTORequest format) {
         Optional<FormatEntity> existingFormatOpt = repository.findById(id);
+
         if (!existingFormatOpt.isPresent()) {
-            return null; // O lanzar una excepción personalizada
+            return new ResponseDto<>(null, 404, "Formato no encontrado");
+        }
+        if (!existingFormatOpt.get().getState().equals("correction")) {
+            return new ResponseDto<>(null, 400, "Formato no se encuentra en estado de corrección");
         }
 
         FormatEntity existingFormat = existingFormatOpt.get();
@@ -59,32 +62,15 @@ public class FormatServiceImpl implements IFormatService {
         updatedFormat.setState(existingFormat.getState());
         updatedFormat.setDate(existingFormat.getDate());
 
-        // Verificar el tipo de la entidad para actualizar sus campos específicos
-        /*
-         * if (existingFormat instanceof FormatPPEntity && updatedFormat instanceof
-         * FormatPPEntity) {
-         * ((FormatPPEntity) updatedFormat).setAdvisor(((FormatPPEntity)
-         * existingFormat).getAdvisor());
-         * ((FormatPPEntity) updatedFormat).setStudent1(((FormatPPEntity)
-         * existingFormat).getStudent1());
-         * } else if (existingFormat instanceof FormatTIEntity && updatedFormat
-         * instanceof FormatTIEntity) {
-         * ((FormatTIEntity) updatedFormat).setStudent1(((FormatTIEntity)
-         * existingFormat).getStudent1());
-         * ((FormatTIEntity) updatedFormat).setStudent2(((FormatTIEntity)
-         * existingFormat).getStudent2());
-         * }
-         */
-
-        FormatEntity savedFormat = repository.save(updatedFormat);
-        return mapper.toFormatDTOResponse(savedFormat);
+        FormatEntity savedFormat = repository.update(updatedFormat);
+        return new ResponseDto<>(mapper.toFormatDTOResponse(savedFormat), 200, "Formato actualizado correctamente");
     }
 
     @Override
-    public FormatDTOResponse getFormat(Integer id) {
+    public ResponseDto<FormatDTOResponse> getFormat(Integer id) {
         Optional<FormatEntity> format = repository.findById(id);
         if (format.isPresent()) {
-            return this.mapper.toFormatDTOResponse(format.get());
+            return new ResponseDto<>(mapper.toFormatDTOResponse(format.get()), 200, "Formato encontrado");
         }
         return null;
     }
@@ -95,7 +81,7 @@ public class FormatServiceImpl implements IFormatService {
     }
 
     @Override
-    public Collection<FormatDTOResponse> getFormatByDateRange(String startDateStr, String endDateStr) {
+    public ResponseDto<Collection<FormatDTOResponse>> getFormatByDateRange(String startDateStr, String endDateStr) {
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date startDate = dateFormat.parse(startDateStr);
@@ -103,7 +89,7 @@ public class FormatServiceImpl implements IFormatService {
 
             Collection<FormatEntity> formats = repository.findByDateRange(startDate, endDate);
 
-            return formats.stream().map(mapper::toFormatDTOResponse).collect(Collectors.toList());
+            return new ResponseDto<>(formats.stream().map(mapper::toFormatDTOResponse).collect(Collectors.toList()), 200, "Formatos encontrados");
             
         } catch (Exception e) {
             throw new IllegalArgumentException("Formato de fecha inválido. Use yyyy-MM-dd", e);
@@ -111,7 +97,7 @@ public class FormatServiceImpl implements IFormatService {
     }
 
     @Override
-    public String changeState(Integer id, String state) {
+    public ResponseDto<String> changeState(Integer id, String state) {
         Optional<FormatEntity> format = repository.findById(id);
 
         Result result = null;
@@ -119,27 +105,7 @@ public class FormatServiceImpl implements IFormatService {
         if (format.isPresent()) {
 
             FormatDTORequest formatDTO = this.mapper.toFormatDTORequest(format.get());
-
-            // asignar un obj de estado al DTO
             this.assignState(format.get().getState());
-            
-            /*switch (format.get().getState()) {
-                case "formulated":
-                    stateServices.setState(new FormulatedState(repository));
-                    break;
-                case "approved":
-                    stateServices.setState(new ApproveState());
-                    break;
-                case "rejected":
-                    stateServices.setState(new RejectSatate());
-                    break;
-                case "correction":
-                    stateServices.setState(new CorrectionState(repository));
-                    break;
-                case "evaluation":
-                    stateServices.setState(new EvaluationState(repository));
-                    break;
-            }*/
 
             switch (state) {
                 case "approved":
@@ -157,8 +123,7 @@ public class FormatServiceImpl implements IFormatService {
             }
         }
 
-        return result.message();
-
+        return new ResponseDto<>(result.message(), 200, "Estado actualizado correctamente");  
     }
 
     private void assignState(String currentState) {
@@ -170,7 +135,7 @@ public class FormatServiceImpl implements IFormatService {
                 stateServices.setState(new ApproveState());
                 break;
             case "rejected":
-                stateServices.setState(new RejectSatate()); // Corregido el nombre
+                stateServices.setState(new RejectSatate());
                 break;
             case "correction":
                 stateServices.setState(new CorrectionState(repository));

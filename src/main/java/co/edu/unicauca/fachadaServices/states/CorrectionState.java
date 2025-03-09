@@ -24,17 +24,17 @@ public class CorrectionState implements StatesInt {
 
     @Override
     public Result approveFormat(FormatDTORequest format) {
-        return new Result(false, "El formato no puede ser aprobado en estado de revisión");
+        return new Result(false, "El formato no puede ser aprobado en estado de corrección");
     }
 
     @Override
     public Result rejectFormat(FormatDTORequest format) {
-        return new Result(false, "El formato no puede ser rechazado en estado de revisión");
+        return new Result(false, "El formato no puede ser rechazado en estado de corrección");
     }
 
     @Override
     public Result sendForCorrection(FormatDTORequest format) {
-        return new Result(false, "El formato ya ha sido enviado para revisión");
+        return new Result(false, "El formato ya ha sido enviado para corrección");
     }
     
 }
