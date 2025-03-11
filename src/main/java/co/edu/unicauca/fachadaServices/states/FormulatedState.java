@@ -21,7 +21,7 @@ public class FormulatedState implements StatesInt {
     public Result sendForEvaluation(FormatDTORequest format) {
         Optional<FormatEntity> formatEntity = repository.findById(format.getId());
         formatEntity.get().setState("evaluation");
-        repository.save(formatEntity.get());
+        repository.update(formatEntity.get());
         return new Result(true, "El formato ha sido enviado para evaluación");
     }
 

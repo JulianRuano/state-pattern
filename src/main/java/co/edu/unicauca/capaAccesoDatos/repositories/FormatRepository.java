@@ -29,7 +29,8 @@ public class FormatRepository {
 
     // Actualizar un formato
     public FormatEntity update(FormatEntity formato) {
-        return formatos.put(formato.getId(), formato);  
+        formatos.put(formato.getId(), formato);    
+        return formato;
     }
 
     // Eliminar un formato
