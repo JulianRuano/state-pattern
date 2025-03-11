@@ -123,7 +123,7 @@ public class FormatServiceImpl implements IFormatService {
             }
         }
 
-        return new ResponseDto<>(result.message(), 200, "Estado actualizado correctamente");  
+        return new ResponseDto<>(result.message(), 200, null);  
     }
 
     private void assignState(String currentState) {

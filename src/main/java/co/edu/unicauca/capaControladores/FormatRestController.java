@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unicauca.fachadaServices.DTO.request.FormatDTORequest;
@@ -47,8 +48,8 @@ public class FormatRestController {
         return formatService.getFormat(id).of();
     }
 
-    @GetMapping("/format/{startDate}/{endDate}")
-    public ResponseEntity<ResponseDto<Collection<FormatDTOResponse>>> getFormatsByDateRange(@PathVariable String startDate,@PathVariable String endDate) {
+    @GetMapping("/format")
+    public ResponseEntity<ResponseDto<Collection<FormatDTOResponse>>> getFormatsByDateRange(@RequestParam String startDate,@RequestParam String endDate) {
         return formatService.getFormatByDateRange(startDate, endDate).of();
     }
 
